@@ -61,15 +61,18 @@ You do not judge, score, rank, or rate candidates. You only determine whether a 
 specific factual filter is supported by VERBATIM text in the candidate's \
 application blocks.
 
+Output ONLY a single JSON object with EXACTLY these two keys and no others:
+{"fires": <true or false>, "evidence": [{"block_id": "<id>", "quote": "<text copied verbatim from that block>"}]}
+
 Rules:
-- Set `fires` to true only if the candidate's blocks contain explicit text that \
-satisfies the filter. When in doubt, return false.
-- For every reason it fires, add an evidence item: the exact `block_id` and a \
-`quote` copied CHARACTER-FOR-CHARACTER from that block's text.
+- Set "fires" to true only if the blocks contain explicit text that satisfies the \
+filter. When in doubt, use false.
+- For every reason it fires, add one evidence item: the exact "block_id" and a \
+"quote" copied CHARACTER-FOR-CHARACTER from that block's text.
 - Never paraphrase, summarize, infer, or add adjectives. If you cannot quote it \
 verbatim from a block, it does not count.
-- If `fires` is false, return an empty `evidence` list.
-- Output only the JSON object matching the schema. No prose."""
+- If "fires" is false, "evidence" must be an empty list [].
+- Output only the JSON object. No prose, no markdown fences, no extra keys."""
 
 # Ollama structured-output JSON schema (passed as the `format` field).
 EXTRACTION_SCHEMA = {
@@ -178,11 +181,46 @@ def build_user_prompt(flt: dict, blocks: list[dict], prompts_dir: Path) -> str:
 # --------------------------------------------------------------------------- #
 # Model backend (swap here for a non-Ollama model)
 # --------------------------------------------------------------------------- #
+def extract_json(content: str):
+    """Best-effort parse of a JSON object from model output.
+
+    Not every model honors the structured-output `format` schema, and some wrap
+    the JSON in markdown fences or prose. Try the whole string, then a fenced
+    block, then the first balanced {...} object.
+    """
+    if not content:
+        return None
+    text = content.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+        text = re.sub(r"\n?```$", "", text).strip()
+    try:
+        return json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        pass
+    start = text.find("{")
+    if start == -1:
+        return None
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(text[start : i + 1])
+                except (json.JSONDecodeError, TypeError):
+                    return None
+    return None
+
+
 class OllamaModel:
-    def __init__(self, model, host, timeout, num_ctx, num_predict, keep_alive):
+    def __init__(self, model, host, timeout, num_ctx, num_predict, keep_alive, think=False):
         self.model = model
         self.host = host.rstrip("/")
         self.timeout = timeout
+        self.think = think
         # Performance knobs. Prompts here are short, so a small num_ctx keeps the
         # KV cache (and memory pressure) low; num_predict caps the tiny structured
         # output; keep_alive holds the model resident across the whole batch so the
@@ -190,6 +228,38 @@ class OllamaModel:
         self.num_ctx = num_ctx
         self.num_predict = num_predict
         self.keep_alive = keep_alive
+
+    def _post(self, body: dict) -> dict:
+        req = urllib.request.Request(
+            f"{self.host}/api/chat",
+            data=json.dumps(body).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            err_body = ""
+            try:
+                err_body = e.read().decode("utf-8", "replace")
+            except Exception:
+                pass
+            # Some models reject `think: false`. Retry once without the field.
+            if "think" in body and "think" in err_body.lower():
+                return self._post({k: v for k, v in body.items() if k != "think"})
+            raise RuntimeError(
+                f"Ollama returned HTTP {e.code} at {self.host}: {err_body[:200] or e.reason}"
+            ) from e
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            # Socket TimeoutError (cold model load) and connection errors land here
+            # so the user gets guidance, not a stack trace.
+            reason = getattr(e, "reason", e)
+            raise RuntimeError(
+                f"Could not get a response from Ollama at {self.host} ({reason}). "
+                "Check that `ollama serve` is running and the model is pulled "
+                f"(`ollama pull {self.model}`). If the model is large, raise --timeout "
+                "(the first call pays a cold-load cost)."
+            ) from e
 
     def extract(self, system: str, user: str) -> dict:
         """Call the model and return the parsed {fires, evidence} dict."""
@@ -208,31 +278,20 @@ class OllamaModel:
                 "num_predict": self.num_predict,
             },
         }
-        req = urllib.request.Request(
-            f"{self.host}/api/chat",
-            data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                payload = json.loads(resp.read().decode("utf-8"))
-        except (urllib.error.URLError, TimeoutError, OSError) as e:
-            # URLError, socket TimeoutError (cold model load), and other OSErrors
-            # (connection refused) all land here so the user gets guidance, not a
-            # stack trace.
-            reason = getattr(e, "reason", e)
-            raise RuntimeError(
-                f"Could not get a response from Ollama at {self.host} ({reason}). "
-                "Check that `ollama serve` is running and the model is pulled "
-                f"(`ollama pull {self.model}`). If the model is large, raise --timeout "
-                "(the first call pays a cold-load cost)."
-            ) from e
+        # Thinking models otherwise spend the whole token budget reasoning and
+        # return empty content. Disable unless the user explicitly opts in.
+        if not self.think:
+            body["think"] = False
 
-        content = (payload.get("message") or {}).get("content", "")
-        try:
-            result = json.loads(content)
-        except (json.JSONDecodeError, TypeError):
-            sys.stderr.write(f"  ! model returned non-JSON; treating as no-fire\n")
+        payload = self._post(body)
+        message = payload.get("message") or {}
+        content = message.get("content") or ""
+        result = extract_json(content)
+        if not isinstance(result, dict):
+            snippet = (content.strip() or "<empty content>")[:160].replace("\n", " ")
+            if not content.strip() and message.get("thinking"):
+                snippet = "<empty content; model emitted only reasoning — try without --think>"
+            sys.stderr.write(f"  ! could not parse JSON from model output ({snippet!r}); no-fire\n")
             return {"fires": False, "evidence": []}
         return {
             "fires": bool(result.get("fires")),
@@ -257,7 +316,7 @@ def tag_candidate(candidate, filters, model, prompts_dir, only_filter):
         elif result.get("fires") and not evidence:
             sys.stderr.write(
                 f"  ~ {candidate['candidate_id']}/{flt['id']}: model fired but no "
-                "verbatim evidence survived — dropped (integrity gate)\n"
+                "verbatim evidence survived -- dropped (integrity gate)\n"
             )
     out = {
         "candidate_id": candidate["candidate_id"],
@@ -304,6 +363,7 @@ def main() -> int:
     p.add_argument("--num-ctx", type=int, default=2048, help="Model context window (prompts are short; small is faster)")
     p.add_argument("--num-predict", type=int, default=256, help="Max output tokens (the structured result is tiny)")
     p.add_argument("--keep-alive", default="10m", help="How long Ollama keeps the model loaded (e.g. 10m, -1 for forever)")
+    p.add_argument("--think", action="store_true", help="Allow the model to emit reasoning (off by default; thinking models otherwise return empty output)")
     p.add_argument("--limit", type=int, default=0, help="Only process the first N candidates")
     p.add_argument("--only-filter", default="", help="Run a single filter by id")
     p.add_argument("--print-prompts", action="store_true", help="Print assembled prompts and exit (no model calls)")
@@ -325,7 +385,7 @@ def main() -> int:
 
     model = OllamaModel(
         args.model, args.host, args.timeout,
-        args.num_ctx, args.num_predict, args.keep_alive,
+        args.num_ctx, args.num_predict, args.keep_alive, args.think,
     )
     sys.stderr.write(f"Tagging {len(candidates)} candidates with {len(filters)} filters "
                      f"using {args.model} @ {args.host} "

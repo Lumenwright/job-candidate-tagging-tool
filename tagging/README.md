@@ -85,6 +85,17 @@ Biggest levers, in order of impact:
 Env-level (set before `ollama serve`): `OLLAMA_FLASH_ATTENTION=1` and
 `OLLAMA_KV_CACHE_TYPE=q8_0` speed things up and free VRAM so more layers fit on GPU.
 
+## Troubleshooting
+
+**All tags come back empty / "could not parse JSON" warnings.** Usually a
+*thinking* model (e.g. qwen3, some gemma builds): it spends the whole token
+budget on reasoning and returns empty `content`. The pipeline disables thinking
+by default (`think: false`) to avoid this; if you passed `--think`, drop it. Some
+models also ignore the JSON-schema `format` constraint, so the exact output shape
+is also spelled out in the prompt and the parser tolerates fences/prose. If a
+specific model still misbehaves, try another (`--model qwen3.5:9b`) or inspect a
+raw call with `curl http://localhost:11434/api/chat`.
+
 ## Integrity guarantee
 
 Every quote the model cites is verified to be a verbatim substring of the block it
