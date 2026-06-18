@@ -1,0 +1,39 @@
+{
+  "filters": [
+    {
+      "id": "shipped_to_production",
+      "label": "Shipped to production",
+      "description": "An application or workflow was deployed to a live production environment, maintained, or integrated into an active operational system.",
+      "job_description_source": "Own the full build lifecycle: prototype in the AI Lab, productionize through Internal Transformation, and maintain solutions post-deployment...",
+      "extraction_rule": "Look for explicit confirmation that an application or workflow was deployed to an end-user production environment, maintained live, or integrated into an active operational system. Do not trip for sandboxes, local scripts, or un-deployed prototypes."
+    },
+    {
+      "id": "explicit_governance_or_risk_mitigation",
+      "label": "Governance / risk mitigation",
+      "description": "Treats risk, governance, ethics, security, privacy, or trust as a deliberate design constraint.",
+      "job_description_source": "treating risk, governance, ethics, and trust as core design constraints rather than afterthoughts.",
+      "extraction_rule": "Scan for explicit mentions of security boundary design, data privacy restrictions, compliance/regulatory frameworks, or automated evaluation guardrails (e.g., hallucination monitoring, PII redacting, or human-in-the-loop vetoes)."
+    },
+    {
+      "id": "multi_step_workflow_design",
+      "label": "Multi-step workflow design",
+      "description": "Architecture beyond a single prompt-and-response: orchestration, agent routing, human-AI handoffs, or decision boundaries.",
+      "job_description_source": "You think in workflows, not just models, designing multi-step processes that account for human-AI handoffs, decision boundaries, and appropriate levels of autonomy.",
+      "extraction_rule": "The text must detail an architecture that uses more than a single prompt-and-response model call. It must explicitly cite multi-step agent routing, orchestrations, distinct human-AI handoff thresholds, or programmatic decision trees."
+    },
+    {
+      "id": "non_traditional_or_low_code_delivery",
+      "label": "Non-traditional / low-code delivery",
+      "description": "Built operational automation or agentic behavior via iPaaS, low-code, API stitching, or config-driven orchestration rather than raw code.",
+      "job_description_source": "...whether through code, configuration, low-code platforms, APIs, or orchestration tools. We know the strongest builders come from a wide range of backgrounds, including engineering, business, strategy, design, and self-taught paths.",
+      "extraction_rule": "Mark as true if the candidate explicitly built operational automation or agentic behaviors using alternative methods such as iPaaS (e.g., Make, Zapier), low-code enterprise modules, API stitching, or config-driven orchestration tools, rather than standard raw code repositories."
+    },
+    {
+      "id": "concrete_technical_tradeoffs_stated",
+      "label": "Concrete technical tradeoffs",
+      "description": "States an explicit engineering or design compromise and what was chosen.",
+      "job_description_source": "What was the hardest decision you faced, and what did you decide? / You can make reasonable assumptions, build quickly, test, learn, and iterate.",
+      "extraction_rule": "Look for the explicit presence of an engineering or design compromise (e.g., prioritizing execution speed over model size, choosing deterministic code over dynamic LLM generations, or managing API cost limits)."
+    }
+  ]
+}
