@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Candidate Tagging — Reviewer View</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --border: #2a2f3a;
+    --text: #e6e9ef;
+    --muted: #9aa3b2;
+    --accent: #6ea8fe;
+    --accent-soft: #24314f;
+    --mark: #ffe08a;
+    --mark-text: #2a2300;
+    --chip: #242935;
+    --chip-active: #2f4a7a;
+    --radius: 10px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    background: var(--panel); position: sticky; top: 0; z-index: 5;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 650; letter-spacing: .2px; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  header .spacer { flex: 1; }
+  .stat { color: var(--muted); font-size: 13px; }
+  .stat b { color: var(--text); }
+  .loadbtn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .loadbtn:hover { border-color: var(--accent); }
+  input[type=file] { display: none; }
+
+  .layout { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 57px); }
+  aside {
+    border-right: 1px solid var(--border); background: var(--panel);
+    padding: 16px 12px; overflow-y: auto;
+  }
+  aside h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
+    color: var(--muted); margin: 4px 8px 10px;
+  }
+  .filter {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    width: 100%; text-align: left; cursor: pointer;
+    background: transparent; border: 1px solid transparent; color: var(--text);
+    padding: 9px 10px; border-radius: 8px; margin-bottom: 2px; font-size: 14px;
+  }
+  .filter:hover { background: var(--panel-2); }
+  .filter.active { background: var(--accent-soft); border-color: var(--accent); }
+  .filter .count {
+    font: 12px/1 var(--mono); color: var(--muted);
+    background: var(--chip); border-radius: 20px; padding: 4px 8px; min-width: 26px; text-align: center;
+  }
+  .filter.active .count { color: var(--text); }
+  .filter .fdesc { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+  main { padding: 22px 26px; overflow-y: auto; }
+  .main-head { margin-bottom: 4px; }
+  .main-head h2 { margin: 0; font-size: 19px; }
+  .main-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  .hint { color: var(--muted); font-size: 13px; }
+
+  .cards { display: grid; gap: 14px; margin-top: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+  }
+  .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cid {
+    font: 12px/1 var(--mono); color: var(--accent);
+    background: var(--accent-soft); padding: 4px 8px; border-radius: 6px;
+  }
+  .cname { font-weight: 600; }
+  .anon { color: var(--muted); font-size: 12px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--chip); border: 1px solid var(--border); color: var(--text);
+    padding: 6px 11px; border-radius: 20px; font-size: 13px; cursor: pointer;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.active { background: var(--chip-active); border-color: var(--accent); }
+  .chip.match { box-shadow: inset 0 0 0 1px var(--accent); }
+  .chip .ec { font: 11px/1 var(--mono); color: var(--muted); }
+  .chip.active .ec { color: var(--text); }
+
+  .evidence { margin-top: 12px; display: grid; gap: 10px; }
+  .ev {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 12px;
+  }
+  .ev .src {
+    font: 11px/1 var(--mono); color: var(--muted);
+    display: flex; gap: 8px; align-items: center; margin-bottom: 6px;
+  }
+  .ev .src .sec { color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }
+  .ev .blocktext { font-size: 14px; color: var(--text); }
+  mark { background: var(--mark); color: var(--mark-text); padding: 0 2px; border-radius: 3px; }
+  .ev .missing { color: #f0a; font-size: 12px; margin-top: 6px; }
+
+  .empty { color: var(--muted); margin-top: 40px; text-align: center; }
+  .footnote { color: var(--muted); font-size: 12px; margin-top: 28px; border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Candidate Tagging — Reviewer View</h1>
+    <div class="sub">Faceting &amp; provenance · no scoring, no ranking · identities obfuscated</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat" id="stats"></div>
+  <label class="loadbtn">
+    ⬆ Load data.json
+    <input type="file" id="file" accept="application/json,.json" />
+  </label>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>Filters</h2>
+    <div id="filters"></div>
+  </aside>
+  <main>
+    <div class="main-head" id="mainHead"></div>
+    <div class="cards" id="cards"></div>
+    <div class="footnote">
+      Click any tag to reveal the verbatim source span that triggered it. Highlighted text
+      is the exact quote your model cited; surrounding text is the full source block.
+      A quote that fails to highlight did not appear verbatim in its block — an extraction-integrity flag.
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---- Sample data (mirrors data.json) so the tool runs on double-click ---- */
+const SAMPLE_DATA = {"schema_version":"1.0","filters":[{"id":"end-to-end-ownership","label":"End-to-end ownership","description":"Claims ownership of a build from problem to working system."},{"id":"shipped-to-production","label":"Shipped to production","description":"States a system reached real users / production."},{"id":"concrete-decision","label":"Concrete hard decision","description":"Names a specific difficult decision and what they decided."},{"id":"governance-thinking","label":"Governance / risk thinking","description":"Raises risk, fairness, security, or governance unprompted."},{"id":"used-ai-tools","label":"Used AI tools","description":"Describes using AI tools and what judgment they kept."},{"id":"non-traditional-path","label":"Non-traditional builder","description":"Built via low-code / config / orchestration or a self-taught path."},{"id":"cross-artifact-conflict","label":"Cross-artifact conflict","description":"Resume and answers appear to disagree — reviewer to interpret."}],"static_questions":[{"question_id":"q1","text":"Describe something you have built end to end, from problem to working system. What was the hardest decision you faced, and what did you decide?"},{"question_id":"q2","text":"Describe a time you used AI tools in your work. What did you hand off to the AI, and what judgment did you keep for yourself?"},{"question_id":"q3","text":"Describe a project where you balanced competing priorities, such as speed against risk or governance. How did you decide what to do?"}],"candidates":[{"candidate_id":"c01","applicant":{"name":"[hidden]"},"blocks":[{"id":"c01-r1","section":"resume","text":"Architected and owned an enterprise AI platform end to end, transforming how the organization operates."},{"id":"c01-q1a1","section":"question_answer","question_id":"q1","text":"I led the entire build from problem to system. The hardest part was managing complexity, and I drove it to success."}],"tags":[{"filter_id":"end-to-end-ownership","evidence":[{"block_id":"c01-r1","quote":"owned an enterprise AI platform end to end"},{"block_id":"c01-q1a1","quote":"I led the entire build from problem to system"}]}]},{"candidate_id":"c02","applicant":{"name":"[hidden]"},"blocks":[{"id":"c02-r1","section":"resume","text":"Backend engineer. Built an internal data pipeline."},{"id":"c02-q1a1","section":"question_answer","question_id":"q1","text":"I built a deduplication service that processes 12M records nightly; the hard call was accepting eventual consistency to hit the latency budget, which I decided was acceptable given downstream tolerance."}],"tags":[{"filter_id":"end-to-end-ownership","evidence":[{"block_id":"c02-q1a1","quote":"I built a deduplication service"}]},{"filter_id":"shipped-to-production","evidence":[{"block_id":"c02-q1a1","quote":"processes 12M records nightly"}]},{"filter_id":"concrete-decision","evidence":[{"block_id":"c02-q1a1","quote":"the hard call was accepting eventual consistency to hit the latency budget"}]}]},{"candidate_id":"c03","applicant":{"name":"[hidden]"},"blocks":[{"id":"c03-r1","section":"resume","text":"Collaborated with cross-functional teams to drive impactful AI initiatives and contributed to several high-visibility programs."},{"id":"c03-q1a1","section":"question_answer","question_id":"q1","text":"I was involved in building a recommendation feature and contributed to many discussions about its direction."},{"id":"c03-q2a1","section":"question_answer","question_id":"q2","text":"I used AI tools to help draft content, and I reviewed everything the team produced."}],"tags":[{"filter_id":"used-ai-tools","evidence":[{"block_id":"c03-q2a1","quote":"I used AI tools to help draft content"}]}]},{"candidate_id":"c04","applicant":{"name":"[hidden]"},"blocks":[{"id":"c04-r1","section":"resume","text":"Shipped a route-optimization tool used daily by 40 drivers."},{"id":"c04-q1a1","section":"question_answer","question_id":"q1","text":"I built a scheduling system; the hardest decision was dropping real-time traffic data because the API was unreliable, so I used historical averages instead."}],"tags":[{"filter_id":"end-to-end-ownership","evidence":[{"block_id":"c04-q1a1","quote":"I built a scheduling system"}]},{"filter_id":"shipped-to-production","evidence":[{"block_id":"c04-r1","quote":"used daily by 40 drivers"}]},{"filter_id":"concrete-decision","evidence":[{"block_id":"c04-q1a1","quote":"the hardest decision was dropping real-time traffic data because the API was unreliable"}]}]},{"candidate_id":"c05","applicant":{"name":"[hidden]"},"blocks":[{"id":"c05-r1","section":"resume","text":"Led a team of five engineers to deliver a fraud-detection model."},{"id":"c05-q1a1","section":"question_answer","question_id":"q1","text":"On the fraud project I supported the lead and implemented the feature store."}],"tags":[{"filter_id":"cross-artifact-conflict","evidence":[{"block_id":"c05-r1","quote":"Led a team of five engineers"},{"block_id":"c05-q1a1","quote":"I supported the lead"}]}]},{"candidate_id":"c06","applicant":{"name":"[hidden]"},"blocks":[{"id":"c06-r1","section":"resume","text":"Built a customer-support assistant deployed to production."},{"id":"c06-q3a1","section":"question_answer","question_id":"q3","text":"I balanced speed against risk by gating the model behind a human review queue for low-confidence outputs, and I logged every decision for auditability."}],"tags":[{"filter_id":"shipped-to-production","evidence":[{"block_id":"c06-r1","quote":"deployed to production"}]},{"filter_id":"governance-thinking","evidence":[{"block_id":"c06-q3a1","quote":"gating the model behind a human review queue"},{"block_id":"c06-q3a1","quote":"I logged every decision for auditability"}]}]},{"candidate_id":"c07","applicant":{"name":"[hidden]"},"blocks":[{"id":"c07-r1","section":"resume","text":"Built and shipped a real-time analytics dashboard to production."},{"id":"c07-q1a1","section":"question_answer","question_id":"q1","text":"I designed the streaming architecture; the hardest decision was choosing Kafka over a managed queue to control cost at scale."}],"tags":[{"filter_id":"shipped-to-production","evidence":[{"block_id":"c07-r1","quote":"shipped a real-time analytics dashboard to production"}]},{"filter_id":"concrete-decision","evidence":[{"block_id":"c07-q1a1","quote":"choosing Kafka over a managed queue to control cost at scale"}]}]},{"candidate_id":"c08","applicant":{"name":"[hidden]"},"blocks":[{"id":"c08-r1","section":"resume","text":"Operations lead. Automated invoice processing using Zapier and Airtable, no code."},{"id":"c08-q1a1","section":"question_answer","question_id":"q1","text":"I built an order-routing workflow with low-code tools and a small script, cutting manual handling by 70%."}],"tags":[{"filter_id":"non-traditional-path","evidence":[{"block_id":"c08-r1","quote":"using Zapier and Airtable, no code"},{"block_id":"c08-q1a1","quote":"with low-code tools"}]},{"filter_id":"end-to-end-ownership","evidence":[{"block_id":"c08-q1a1","quote":"I built an order-routing workflow"}]},{"filter_id":"shipped-to-production","evidence":[{"block_id":"c08-q1a1","quote":"cutting manual handling by 70%"}]}]}]};
+
+/* ---------------- State ---------------- */
+let DATA = SAMPLE_DATA;
+let selectedFilter = null;                 // null === "All candidates"
+const expanded = new Set();                // keys "candidateId::filterId"
+
+/* ---------------- Helpers ---------------- */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const displayLabel = (id) => {
+  const m = String(id).match(/(\d+)/);
+  return m ? "Candidate " + m[1].padStart(2, "0") : esc(id);
+};
+const filterById = (fid) => DATA.filters.find((f) => f.id === fid);
+const candidatesWith = (fid) => DATA.candidates.filter((c) => (c.tags || []).some((t) => t.filter_id === fid));
+
+const sectionLabel = (block) => {
+  if (!block) return "source";
+  if (block.section === "resume") return "Résumé";
+  if (block.section === "submission") return "Submission";
+  if (block.section === "question_answer") return (block.question_id ? block.question_id.toUpperCase() + " answer" : "Answer");
+  return block.section || "source";
+};
+
+// Highlight every cited quote inside the full block text. Returns {html, allFound}.
+function highlightBlock(candidate, blockId, quotes) {
+  const block = (candidate.blocks || []).find((b) => b.id === blockId);
+  if (!block) return { block: null, html: '<span class="missing">⚠ block ' + esc(blockId) + " not found</span>", allFound: false };
+  const ranges = [];
+  let allFound = true;
+  for (const q of quotes) {
+    const idx = block.text.indexOf(q);
+    if (idx === -1) { allFound = false; continue; }
+    ranges.push([idx, idx + q.length]);
+  }
+  ranges.sort((a, b) => a[0] - b[0]);
+  // merge overlaps
+  const merged = [];
+  for (const r of ranges) {
+    if (merged.length && r[0] <= merged[merged.length - 1][1]) {
+      merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], r[1]);
+    } else merged.push(r.slice());
+  }
+  let html = "", cur = 0;
+  for (const [s, e] of merged) {
+    html += esc(block.text.slice(cur, s)) + "<mark>" + esc(block.text.slice(s, e)) + "</mark>";
+    cur = e;
+  }
+  html += esc(block.text.slice(cur));
+  return { block, html, allFound };
+}
+
+/* ---------------- Render ---------------- */
+function renderStats() {
+  $("stats").innerHTML = "<b>" + DATA.candidates.length + "</b> candidates · <b>" + DATA.filters.length + "</b> filters";
+}
+
+function renderFilters() {
+  const total = DATA.candidates.length;
+  let html = "";
+  html += '<button class="filter ' + (selectedFilter === null ? "active" : "") + '" data-f="__all__">' +
+            '<span>All candidates</span><span class="count">' + total + "</span></button>";
+  for (const f of DATA.filters) {
+    const n = candidatesWith(f.id).length;
+    html += '<button class="filter ' + (selectedFilter === f.id ? "active" : "") + '" data-f="' + esc(f.id) + '">' +
+              "<span><span>" + esc(f.label) + '</span><span class="fdesc">' + esc(f.description || "") + "</span></span>" +
+              '<span class="count">' + n + "</span></button>";
+  }
+  $("filters").innerHTML = html;
+  $("filters").querySelectorAll(".filter").forEach((el) => {
+    el.onclick = () => {
+      const f = el.getAttribute("data-f");
+      selectedFilter = f === "__all__" ? null : f;
+      expanded.clear();
+      render();
+    };
+  });
+}
+
+function renderMain() {
+  const list = selectedFilter === null ? DATA.candidates : candidatesWith(selectedFilter);
+  const f = selectedFilter ? filterById(selectedFilter) : null;
+
+  $("mainHead").innerHTML = selectedFilter === null
+    ? "<h2>All candidates</h2><p>" + list.length + " candidates · select a filter to facet, click any tag for its source.</p>"
+    : "<h2>Matching: " + esc(f.label) + "</h2><p>" + list.length + " of " + DATA.candidates.length +
+      " candidates · each card shows their other tags too. <span class='hint'>Faceting, not ranking — order is not significance.</span></p>";
+
+  if (!list.length) { $("cards").innerHTML = '<div class="empty">No candidates carry this filter.</div>'; return; }
+
+  let html = "";
+  for (const c of list) {
+    const tags = c.tags || [];
+    html += '<div class="card">';
+    html += '<div class="card-top"><span class="cid">' + esc(c.candidate_id) + '</span>' +
+            '<span class="cname">' + displayLabel(c.candidate_id) + '</span>' +
+            '<span class="anon">· identity obfuscated</span></div>';
+
+    // tag chips (all of the candidate's tags; the selected filter marked as match)
+    html += '<div class="chips">';
+    for (const t of tags) {
+      const filt = filterById(t.filter_id);
+      const label = filt ? filt.label : t.filter_id;
+      const key = c.candidate_id + "::" + t.filter_id;
+      const isOpen = expanded.has(key);
+      const isMatch = selectedFilter && t.filter_id === selectedFilter;
+      const evCount = (t.evidence || []).length;
+      html += '<button class="chip ' + (isOpen ? "active " : "") + (isMatch ? "match" : "") + '" data-key="' + esc(key) + '">' +
+                esc(label) + ' <span class="ec">' + evCount + "</span></button>";
+    }
+    html += "</div>";
+
+    // expanded evidence
+    for (const t of tags) {
+      const key = c.candidate_id + "::" + t.filter_id;
+      if (!expanded.has(key)) continue;
+      html += '<div class="evidence">';
+      for (const ev of (t.evidence || [])) {
+        const r = highlightBlock(c, ev.block_id, [ev.quote]);
+        html += '<div class="ev"><div class="src"><span class="sec">' + esc(sectionLabel(r.block)) +
+                  '</span><span>' + esc(ev.block_id) + "</span></div>" +
+                '<div class="blocktext">' + r.html + "</div>" +
+                (r.allFound ? "" : '<div class="missing">⚠ quote not found verbatim in source — possible extraction error</div>') +
+                "</div>";
+      }
+      html += "</div>";
+    }
+    html += "</div>";
+  }
+  $("cards").innerHTML = html;
+
+  $("cards").querySelectorAll(".chip").forEach((el) => {
+    el.onclick = () => {
+      const k = el.getAttribute("data-key");
+      if (expanded.has(k)) expanded.delete(k); else expanded.add(k);
+      render();
+    };
+  });
+}
+
+function render() { renderStats(); renderFilters(); renderMain(); }
+
+/* ---------------- Load external data.json ---------------- */
+$("file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      if (!parsed.candidates || !parsed.filters) throw new Error("missing 'filters' or 'candidates'");
+      DATA = parsed;
+      selectedFilter = null;
+      expanded.clear();
+      render();
+    } catch (err) {
+      alert("Could not load JSON: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+render();
+</script>
+</body>
+</html>

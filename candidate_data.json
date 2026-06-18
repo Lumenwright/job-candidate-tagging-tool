@@ -1,0 +1,631 @@
+{
+"static_questions": [
+{
+"question_id": "q1",
+"text": "Describe something you have built end to end, from problem to working system. What was the hardest decision you faced, and what did you decide?"
+},
+{
+"question_id": "q2",
+"text": "Describe a time you used AI tools in your work. What did you hand off to the AI, and what judgment did you keep for yourself?"
+},
+{
+"question_id": "q3",
+"text": "Describe a project where you balanced competing priorities, such as speed against risk or governance. How did you decide what to do?"
+}
+],
+"candidates": [
+{
+"candidate_id": "c01",
+"_planted_trait": "over-claimer",
+"applicant": {
+"name": "Marcus Sterling",
+"location": "New York, NY",
+"education": [
+{
+"credential": "MBA",
+"institution": "Columbia University",
+"year": "2018"
+},
+{
+"credential": "BS Computer Science",
+"institution": "New York University",
+"year": "2014"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c01-r1",
+"text": "Architected enterprise AI transformations for Fortune 500 clients."
+},
+{
+"id": "c01-r2",
+"text": "Spearheaded the delivery of next-generation machine learning platforms."
+},
+{
+"id": "c01-r3",
+"text": "Led cross-functional synergies to drive predictive outcomes."
+},
+{
+"id": "c01-r4",
+"text": "Owned end-to-end execution of deep learning initiatives."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c01-s1",
+"text": "A visionary AI leader who transforms business landscapes."
+},
+{
+"id": "c01-s2",
+"text": "Driven by a passion for spearheading strategic initiatives and architecting robust solutions."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c01-q1a1",
+"text": "I architected an end-to-end AI platform that revolutionized our internal workflows. The hardest decision was navigating complex stakeholder ecosystems, which I resolved by leading alignment workshops to ensure total synergy."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c01-q2a1",
+"text": "I leveraged cutting-edge AI tools to transform my productivity and drive maximum output. I handed off the routine ideation phase, retaining my executive judgment to oversee the strategic direction."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c01-q3a1",
+"text": "I consistently balance speed and risk by architecting optimized frameworks that deliver rapid value. My decision process always prioritizes empowering teams while owning the overarching strategic vision."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c02",
+"_planted_trait": "under-seller",
+"applicant": {
+"name": "Elena Rostova",
+"location": "Chicago, IL",
+"education": [
+{
+"credential": "Self-taught",
+"institution": "No Degree",
+"year": "N/A"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c02-r1",
+"text": "Software developer at FinTech Corp."
+},
+{
+"id": "c02-r2",
+"text": "Worked on backend Python APIs."
+},
+{
+"id": "c02-r3",
+"text": "Set up a document parsing script for the operations team."
+},
+{
+"id": "c02-r4",
+"text": "Maintained SQL databases and fixed bugs."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c02-s1",
+"text": "Developer with 4 years of experience."
+},
+{
+"id": "c02-s2",
+"text": "Looking for a role to work on interesting AI problems."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c02-q1a1",
+"text": "I built a document parsing system for operations. The hardest decision was whether to use rule-based OCR or an LLM, and I chose to fine-tune a local BERT model on our custom financial documents to handle the highly variable formatting without leaking data."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c02-q2a1",
+"text": "I use Copilot and Claude for writing boilerplate test cases and API routing. I keep the architectural design, database schema decisions, and security validation for myself."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c02-q3a1",
+"text": "We needed to deploy the parsing system quickly, but processing financial PII requires high accuracy and security. I decided to release it as a shadow-mode pipeline first to validate its accuracy against human operators before going fully live."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c03",
+"_planted_trait": "polished-but-shallow",
+"applicant": {
+"name": "Julian Vance",
+"location": "San Francisco, CA",
+"education": [
+{
+"credential": "BA Communications",
+"institution": "UC Berkeley",
+"year": "2019"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c03-r1",
+"text": "Collaborated extensively with data science teams to conceptualize user-centric AI features."
+},
+{
+"id": "c03-r2",
+"text": "Contributed to the deployment of machine learning pipelines by gathering critical business requirements."
+},
+{
+"id": "c03-r3",
+"text": "Partnered with engineering leads to ensure smooth agile sprints for AI integrations."
+},
+{
+"id": "c03-r4",
+"text": "Was involved in evaluating vendor solutions for natural language processing capabilities."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c03-s1",
+"text": "An enthusiastic and highly communicative professional passionate about the future of AI."
+},
+{
+"id": "c03-s2",
+"text": "Dedicated to facilitating teamwork and ensuring everyone is aligned on our technological goals."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c03-q1a1",
+"text": "I collaborated on an initiative to build a chatbot for customer service, working closely with developers from the initial problem definition to the final working system. The hardest decision was selecting the tone of voice for the bot, and we decided on a friendly, professional approach after consulting with marketing."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c03-q2a1",
+"text": "I frequently use AI writing assistants to help draft project updates and meeting notes. I hand off the initial drafting process, but I always retain the final judgment on the exact phrasing before distributing it to stakeholders."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c03-q3a1",
+"text": "In our chatbot project, we had to balance the desire to launch quickly with the need to adhere to company governance policies. I helped facilitate discussions between the risk team and the developers so we could find a timeline that worked for everyone."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c04",
+"_planted_trait": "genuine-but-terse",
+"applicant": {
+"name": "David Chen",
+"location": "Austin, TX",
+"education": [
+{
+"credential": "BS Software Engineering",
+"institution": "University of Texas at Austin",
+"year": "2021"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c04-r1",
+"text": "Wrote a RAG pipeline using Langchain and Pinecone."
+},
+{
+"id": "c04-r2",
+"text": "Deployed 3 FastAPI microservices to AWS Fargate."
+},
+{
+"id": "c04-r3",
+"text": "Reduced token costs by 40% through prompt caching."
+},
+{
+"id": "c04-r4",
+"text": "Integrated Stripe billing for our AI SaaS product."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c04-s1",
+"text": "Backend engineer focused on LLM integrations."
+},
+{
+"id": "c04-s2",
+"text": "I like building fast, reliable APIs."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c04-q1a1",
+"text": "I built a legal contract summarizer. The hardest decision was handling context window limits for 200-page PDFs, so I decided to chunk the text by semantic section headers rather than fixed token counts."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c04-q2a1",
+"text": "I use ChatGPT to write regular expressions and bash scripts. I write the core application logic and system architecture myself because the AI often hallucinates bad library dependencies."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c04-q3a1",
+"text": "Sales wanted the summarizer shipped in two weeks, but the risk of hallucinating legal clauses was too high. I hard-coded a rule to only allow extractive summaries and delayed the generative feature until we built a reliable evaluation harness."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c05",
+"_planted_trait": "cross-artifact mismatch",
+"applicant": {
+"name": "Sarah Jenkins",
+"location": "Atlanta, GA",
+"education": [
+{
+"credential": "MS Information Systems",
+"institution": "Georgia State University",
+"year": "2020"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c05-r1",
+"text": "Led a team of five engineers to deliver a predictive maintenance AI solution."
+},
+{
+"id": "c05-r2",
+"text": "Directed the overall system architecture and cloud infrastructure strategy."
+},
+{
+"id": "c05-r3",
+"text": "Managed client expectations and project deliverables as the primary technical lead."
+},
+{
+"id": "c05-r4",
+"text": "Mentored junior developers in machine learning best practices."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c05-s1",
+"text": "Experienced technical leader with a track record of guiding teams to AI success."
+},
+{
+"id": "c05-s2",
+"text": "Focused on driving impactful results through strong team management."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c05-q1a1",
+"text": "We built a predictive maintenance system for manufacturing equipment. The hardest decision was choosing the time-series forecasting model, which I helped research while I supported the lead engineer who made the final architectural call."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c05-q2a1",
+"text": "I use AI to help me summarize long research papers on new model architectures. I rely on it for the high-level summary but I read the methodology sections myself to judge if it applies to our work."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c05-q3a1",
+"text": "When balancing speed and risk, I typically followed the guidelines set by our project manager. I decided to prioritize my specific ticket assignments to ensure the team hit our sprint goals on time."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c06",
+"_planted_trait": "governance-strong",
+"applicant": {
+"name": "Priya Patel",
+"location": "Toronto, ON",
+"education": [
+{
+"credential": "BSc Computer Science",
+"institution": "University of Toronto",
+"year": "2016"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c06-r1",
+"text": "Developed a highly scalable recommendation engine for e-commerce platforms."
+},
+{
+"id": "c06-r2",
+"text": "Implemented automated CI/CD pipelines to ensure reproducible model training."
+},
+{
+"id": "c06-r3",
+"text": "Designed data ingestion services processing millions of daily events."
+},
+{
+"id": "c06-r4",
+"text": "Built a customer segmentation model to improve marketing ROI."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c06-s1",
+"text": "Senior machine learning engineer focused on scalable and responsible AI systems."
+},
+{
+"id": "c06-s2",
+"text": "Passionate about bridging the gap between raw data and actionable, secure business insights."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c06-q1a1",
+"text": "I built an automated resume screening tool for an HR client from scratch. The hardest decision was handling the potential for historical bias in the training data, so I decided to implement a demographic parity constraint during training to ensure equitable outcomes across groups."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c06-q2a1",
+"text": "I use GitHub Copilot to generate boilerplate code and unit tests. I strictly hand off non-sensitive logic, but I completely reserve judgment for security reviews, data validation rules, and ensuring no PII is ever passed to external APIs."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c06-q3a1",
+"text": "The business pushed to release a generative AI feature quickly to beat a competitor, but I identified severe prompt injection vulnerabilities. I decided to block the release until we implemented a rigorous input sanitization layer and got sign-off from the privacy board."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c07",
+"_planted_trait": "governance-silent",
+"applicant": {
+"name": "Alex Mercer",
+"location": "Seattle, WA",
+"education": [
+{
+"credential": "BS Mathematics",
+"institution": "University of Washington",
+"year": "2018"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c07-r1",
+"text": "Engineered a real-time dynamic pricing model for a logistics network."
+},
+{
+"id": "c07-r2",
+"text": "Trained custom embedding models to improve search relevance by 22%."
+},
+{
+"id": "c07-r3",
+"text": "Deployed Triton Inference Server to hit sub-50ms p99 latency targets."
+},
+{
+"id": "c07-r4",
+"text": "Built an autonomous agent that scrapes and synthesizes competitor pricing."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c07-s1",
+"text": "Hardcore builder obsessed with optimizing AI performance."
+},
+{
+"id": "c07-s2",
+"text": "I ship fast, highly performant systems that drive immediate revenue."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c07-q1a1",
+"text": "I built a web-scraping agent network that automatically updates our product pricing. The hardest decision was managing rate limits on target sites, which I solved by building a distributed proxy rotation system to maximize throughput."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c07-q2a1",
+"text": "I use LLMs to write my SQL queries and optimize my Python loops. I let the AI write the code, and I just focus on benchmarking the execution speed to make sure it runs as fast as possible."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c07-q3a1",
+"text": "Product wanted a new automated outreach feature built in a month, but there were concerns about whether the system could handle the scale. I decided to bypass our standard testing environment and deploy directly to production behind a feature flag to get real user data instantly."
+}
+]
+}
+]
+},
+{
+"candidate_id": "c08",
+"_planted_trait": "non-traditional builder",
+"applicant": {
+"name": "Carlos Mendoza",
+"location": "Miami, FL",
+"education": [
+{
+"credential": "High School Diploma",
+"institution": "Self-taught",
+"year": "2013"
+}
+]
+},
+"resume": {
+"blocks": [
+{
+"id": "c08-r1",
+"text": "Operations Manager turned Automation Specialist."
+},
+{
+"id": "c08-r2",
+"text": "Built an automated email triage system using Zapier, Airtable, and OpenAI API."
+},
+{
+"id": "c08-r3",
+"text": "Designed conversational workflows using Voiceflow for customer support."
+},
+{
+"id": "c08-r4",
+"text": "Reduced manual data entry by 80% using no-code orchestration."
+}
+]
+},
+"submission_summary": {
+"blocks": [
+{
+"id": "c08-s1",
+"text": "I solve business bottlenecks by stitching together the best APIs and no-code tools."
+},
+{
+"id": "c08-s2",
+"text": "Self-taught problem solver with a background in customer operations."
+}
+]
+},
+"question_answers": [
+{
+"question_id": "q1",
+"answer_blocks": [
+{
+"id": "c08-q1a1",
+"text": "I built an end-to-end invoice processing system using Make.com, Google Drive, and Claude. The hardest decision was how to handle edge cases when the OCR failed, and I decided to build a human-in-the-loop Slack alert that pings the ops team with a button to manually review."
+}
+]
+},
+{
+"question_id": "q2",
+"answer_blocks": [
+{
+"id": "c08-q2a1",
+"text": "I use AI APIs to extract structured JSON data from messy customer emails. I hand off the text extraction to the AI, but I keep the final judgment on whether to approve a refund entirely in the hands of my human agents via a dashboard."
+}
+]
+},
+{
+"question_id": "q3",
+"answer_blocks": [
+{
+"id": "c08-q3a1",
+"text": "We needed to automate responses to angry customers quickly, but there was a huge risk of the AI saying the wrong thing. I decided to prioritize safety by making the AI draft the responses in a Zendesk queue, rather than auto-sending them to the customer."
+}
+]
+}
+]
+}
+]
+}

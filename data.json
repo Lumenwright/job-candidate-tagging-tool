@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "filters": [
+    { "id": "end-to-end-ownership", "label": "End-to-end ownership", "description": "Claims ownership of a build from problem to working system." },
+    { "id": "shipped-to-production", "label": "Shipped to production", "description": "States a system reached real users / production." },
+    { "id": "concrete-decision", "label": "Concrete hard decision", "description": "Names a specific difficult decision and what they decided." },
+    { "id": "governance-thinking", "label": "Governance / risk thinking", "description": "Raises risk, fairness, security, or governance unprompted." },
+    { "id": "used-ai-tools", "label": "Used AI tools", "description": "Describes using AI tools and what judgment they kept." },
+    { "id": "non-traditional-path", "label": "Non-traditional builder", "description": "Built via low-code / config / orchestration or a self-taught path." },
+    { "id": "cross-artifact-conflict", "label": "Cross-artifact conflict", "description": "Resume and answers appear to disagree — reviewer to interpret." }
+  ],
+  "static_questions": [
+    { "question_id": "q1", "text": "Describe something you have built end to end, from problem to working system. What was the hardest decision you faced, and what did you decide?" },
+    { "question_id": "q2", "text": "Describe a time you used AI tools in your work. What did you hand off to the AI, and what judgment did you keep for yourself?" },
+    { "question_id": "q3", "text": "Describe a project where you balanced competing priorities, such as speed against risk or governance. How did you decide what to do?" }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "c01",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c01-r1", "section": "resume", "text": "Architected and owned an enterprise AI platform end to end, transforming how the organization operates." },
+        { "id": "c01-q1a1", "section": "question_answer", "question_id": "q1", "text": "I led the entire build from problem to system. The hardest part was managing complexity, and I drove it to success." }
+      ],
+      "tags": [
+        { "filter_id": "end-to-end-ownership", "evidence": [
+          { "block_id": "c01-r1", "quote": "owned an enterprise AI platform end to end" },
+          { "block_id": "c01-q1a1", "quote": "I led the entire build from problem to system" }
+        ] }
+      ]
+    },
+    {
+      "candidate_id": "c02",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c02-r1", "section": "resume", "text": "Backend engineer. Built an internal data pipeline." },
+        { "id": "c02-q1a1", "section": "question_answer", "question_id": "q1", "text": "I built a deduplication service that processes 12M records nightly; the hard call was accepting eventual consistency to hit the latency budget, which I decided was acceptable given downstream tolerance." }
+      ],
+      "tags": [
+        { "filter_id": "end-to-end-ownership", "evidence": [ { "block_id": "c02-q1a1", "quote": "I built a deduplication service" } ] },
+        { "filter_id": "shipped-to-production", "evidence": [ { "block_id": "c02-q1a1", "quote": "processes 12M records nightly" } ] },
+        { "filter_id": "concrete-decision", "evidence": [ { "block_id": "c02-q1a1", "quote": "the hard call was accepting eventual consistency to hit the latency budget" } ] }
+      ]
+    },
+    {
+      "candidate_id": "c03",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c03-r1", "section": "resume", "text": "Collaborated with cross-functional teams to drive impactful AI initiatives and contributed to several high-visibility programs." },
+        { "id": "c03-q1a1", "section": "question_answer", "question_id": "q1", "text": "I was involved in building a recommendation feature and contributed to many discussions about its direction." },
+        { "id": "c03-q2a1", "section": "question_answer", "question_id": "q2", "text": "I used AI tools to help draft content, and I reviewed everything the team produced." }
+      ],
+      "tags": [
+        { "filter_id": "used-ai-tools", "evidence": [ { "block_id": "c03-q2a1", "quote": "I used AI tools to help draft content" } ] }
+      ]
+    },
+    {
+      "candidate_id": "c04",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c04-r1", "section": "resume", "text": "Shipped a route-optimization tool used daily by 40 drivers." },
+        { "id": "c04-q1a1", "section": "question_answer", "question_id": "q1", "text": "I built a scheduling system; the hardest decision was dropping real-time traffic data because the API was unreliable, so I used historical averages instead." }
+      ],
+      "tags": [
+        { "filter_id": "end-to-end-ownership", "evidence": [ { "block_id": "c04-q1a1", "quote": "I built a scheduling system" } ] },
+        { "filter_id": "shipped-to-production", "evidence": [ { "block_id": "c04-r1", "quote": "used daily by 40 drivers" } ] },
+        { "filter_id": "concrete-decision", "evidence": [ { "block_id": "c04-q1a1", "quote": "the hardest decision was dropping real-time traffic data because the API was unreliable" } ] }
+      ]
+    },
+    {
+      "candidate_id": "c05",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c05-r1", "section": "resume", "text": "Led a team of five engineers to deliver a fraud-detection model." },
+        { "id": "c05-q1a1", "section": "question_answer", "question_id": "q1", "text": "On the fraud project I supported the lead and implemented the feature store." }
+      ],
+      "tags": [
+        { "filter_id": "cross-artifact-conflict", "evidence": [
+          { "block_id": "c05-r1", "quote": "Led a team of five engineers" },
+          { "block_id": "c05-q1a1", "quote": "I supported the lead" }
+        ] }
+      ]
+    },
+    {
+      "candidate_id": "c06",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c06-r1", "section": "resume", "text": "Built a customer-support assistant deployed to production." },
+        { "id": "c06-q3a1", "section": "question_answer", "question_id": "q3", "text": "I balanced speed against risk by gating the model behind a human review queue for low-confidence outputs, and I logged every decision for auditability." }
+      ],
+      "tags": [
+        { "filter_id": "shipped-to-production", "evidence": [ { "block_id": "c06-r1", "quote": "deployed to production" } ] },
+        { "filter_id": "governance-thinking", "evidence": [
+          { "block_id": "c06-q3a1", "quote": "gating the model behind a human review queue" },
+          { "block_id": "c06-q3a1", "quote": "I logged every decision for auditability" }
+        ] }
+      ]
+    },
+    {
+      "candidate_id": "c07",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c07-r1", "section": "resume", "text": "Built and shipped a real-time analytics dashboard to production." },
+        { "id": "c07-q1a1", "section": "question_answer", "question_id": "q1", "text": "I designed the streaming architecture; the hardest decision was choosing Kafka over a managed queue to control cost at scale." }
+      ],
+      "tags": [
+        { "filter_id": "shipped-to-production", "evidence": [ { "block_id": "c07-r1", "quote": "shipped a real-time analytics dashboard to production" } ] },
+        { "filter_id": "concrete-decision", "evidence": [ { "block_id": "c07-q1a1", "quote": "choosing Kafka over a managed queue to control cost at scale" } ] }
+      ]
+    },
+    {
+      "candidate_id": "c08",
+      "applicant": { "name": "[hidden]" },
+      "blocks": [
+        { "id": "c08-r1", "section": "resume", "text": "Operations lead. Automated invoice processing using Zapier and Airtable, no code." },
+        { "id": "c08-q1a1", "section": "question_answer", "question_id": "q1", "text": "I built an order-routing workflow with low-code tools and a small script, cutting manual handling by 70%." }
+      ],
+      "tags": [
+        { "filter_id": "non-traditional-path", "evidence": [
+          { "block_id": "c08-r1", "quote": "using Zapier and Airtable, no code" },
+          { "block_id": "c08-q1a1", "quote": "with low-code tools" }
+        ] },
+        { "filter_id": "end-to-end-ownership", "evidence": [ { "block_id": "c08-q1a1", "quote": "I built an order-routing workflow" } ] },
+        { "filter_id": "shipped-to-production", "evidence": [ { "block_id": "c08-q1a1", "quote": "cutting manual handling by 70%" } ] }
+      ]
+    }
+  ]
+}
