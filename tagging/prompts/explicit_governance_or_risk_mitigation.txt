@@ -1,0 +1,18 @@
+Detect whether the candidate describes a CONCRETE risk, governance, ethics,
+security, or privacy mechanism they treated as a design constraint.
+
+FIRES WHEN the text names a specific mechanism such as:
+- human-in-the-loop review, approval gates, or a human veto on AI output, or
+- evaluation guardrails (hallucination/quality monitoring, automated checks), or
+- data privacy or PII handling (redaction, access restriction, retention limits), or
+- security boundaries (sandboxing, permissioning, isolation), or
+- compliance / regulatory / audit measures (audit logging, policy enforcement).
+
+DOES NOT FIRE WHEN the text only:
+- uses buzzwords ("responsible AI", "ethical", "trustworthy") with no mechanism, or
+- claims to "care about quality/safety" without saying what was done, or
+- refers to project/schedule/business risk rather than AI or data risk, or
+- mentions governance only as a topic without the candidate having acted on it.
+
+Cite the exact span describing the mechanism. The mechanism must be something the
+candidate did or designed, not a general value statement.

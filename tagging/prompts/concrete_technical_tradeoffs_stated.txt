@@ -1,0 +1,20 @@
+Detect whether the candidate states an EXPLICIT engineering or design tradeoff:
+choosing one option over another, with what was given up or why.
+
+FIRES WHEN the text names a concrete compromise such as:
+- speed / time-to-ship vs accuracy, model size, or completeness, or
+- deterministic code vs dynamic LLM generation, or
+- cost or API-budget limits driving a choice, or
+- latency vs quality, build vs buy, or simplicity vs flexibility, or
+- accepting a known limitation to gain something (e.g. eventual consistency for
+  latency), where both the choice AND its reason or cost are stated.
+
+DOES NOT FIRE WHEN the text only:
+- uses sweeping verbs with no decision ("drove success", "managed complexity",
+  "navigated stakeholders", "transformed the business"), or
+- says a decision was "hard" without stating what was traded off or chosen, or
+- lists technologies without a comparative choice between alternatives, or
+- describes a preference with no alternative considered or cost acknowledged.
+
+Cite the exact span showing the choice and its tradeoff or rationale. Empty
+leadership or impact language without a concrete decision must NOT fire.

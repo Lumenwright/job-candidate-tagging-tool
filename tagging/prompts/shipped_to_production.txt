@@ -1,0 +1,21 @@
+Detect whether the candidate states that something they built reached a real,
+operational, in-use state — not just that it was built.
+
+FIRES WHEN the text explicitly says a system, application, or workflow was:
+- deployed to production or to real end users, or
+- used in real operations / day-to-day work by real people, or
+- maintained, supported, or operated after launch, or
+- integrated into an active, live operational system.
+Real-usage phrasing counts even if the word "production" is absent
+(e.g. "used daily by 40 drivers", "rolled out to the support team").
+
+DOES NOT FIRE WHEN the build is only:
+- a prototype, proof of concept, demo, pilot-not-launched, hackathon project,
+  sandbox experiment, or local script, or
+- described as "built" / "developed" / "delivered" with no statement that it
+  went live or was used operationally, or
+- a planned or intended deployment that has not happened.
+
+Cite the exact span that states the live/operational/maintained status. If the
+only evidence is generic ("delivered solutions", "drove impact") with no
+operational detail, do not fire.

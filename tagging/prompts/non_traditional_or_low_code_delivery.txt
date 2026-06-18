@@ -1,0 +1,18 @@
+Detect whether the candidate built operational automation or agentic behavior
+using alternative methods rather than primarily writing raw code in a repository.
+
+FIRES WHEN the text says they built something using:
+- iPaaS / automation platforms (Make, Zapier, n8n, Power Automate), or
+- low-code / no-code platforms (Airtable, Retool, Bubble, Glide, app builders), or
+- API stitching / integration as the primary build method (connecting services
+  rather than writing a custom application), or
+- config-driven orchestration or workflow tools.
+The signal is the BUILD METHOD being non-traditional/low-code — surface this
+regardless of the candidate's background or job title.
+
+DOES NOT FIRE WHEN the text describes:
+- a system built primarily in code (programming languages, repos, frameworks), or
+- using a SaaS product only as an end user (not building automation with it), or
+- mentioning such a tool in passing without building operational automation on it.
+
+Cite the exact span naming the tool/method and what was built with it.

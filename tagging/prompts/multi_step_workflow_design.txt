@@ -1,0 +1,18 @@
+Detect whether the candidate describes an architecture that is MORE than a single
+prompt-and-response model call — a designed multi-step process.
+
+FIRES WHEN the text explicitly describes:
+- multiple connected stages or a pipeline (e.g. retrieve -> generate -> verify), or
+- agent routing, orchestration, or tool-calling chains, or
+- human-AI handoff points or thresholds (when control passes to a human), or
+- decision boundaries, branching logic, or programmatic decision trees, or
+- defined levels of autonomy for different steps.
+
+DOES NOT FIRE WHEN the text only:
+- describes a single model call / one prompt / one-shot generation, or
+- says "AI workflow", "end-to-end system", or "pipeline" with no steps described, or
+- lists tools or technologies without saying how they connect into a process, or
+- claims complexity ("sophisticated", "robust") without naming the steps.
+
+Cite the exact span that names the steps, handoffs, or routing. The structure must
+be described, not merely asserted.
