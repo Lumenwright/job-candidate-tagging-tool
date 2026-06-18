@@ -31,7 +31,7 @@ candidate_data.json                 data.json                  index.html
 
 ```bash
 # Stage 1: generate tags (requires Ollama running + a model pulled)
-ollama pull llama3.1:8b
+ollama pull qwen3.5:9b
 python tagging/tag_candidates.py            # writes ./data.json
 
 # Stage 2: review
